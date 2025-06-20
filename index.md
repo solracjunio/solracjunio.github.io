@@ -1,6 +1,6 @@
 ---
 layout: single
-title: "Solrac Junio Blogs"
+title: "Solrac Junio Blog"
 toc: true
 toc_sticky: true
 permalink: /
