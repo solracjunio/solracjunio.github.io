@@ -3,7 +3,8 @@ url: "https://solracjunio.github.io"
 description: >- 
   Blog sobre desenvolvimento de jogos, arte voxel, e projetos pessoais.
 
-theme: minimal-mistakes-jekyll
+#theme: minimal-mistakes-jekyll
+remote_theme: mmistakes/minimal-mistakes
 
 include: ["_pages"]
 
@@ -24,6 +25,7 @@ plugins:
   - jekyll-feed
   - jekyll-sitemap
   - jekyll-seo-tag
+  - jekyll-include-cache
 
 footer:
   links:
