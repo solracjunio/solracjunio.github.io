@@ -1,0 +1,38 @@
+title: "Solrac Junio"
+url: "https://solracjunio.github.io"
+description: >- 
+  Blog sobre desenvolvimento de jogos, arte voxel, e projetos pessoais.
+
+theme: minimal-mistakes-jekyll
+
+include: ["_pages"]
+
+search: true
+
+defaults:
+  # _posts
+  - scope:
+      path: ""
+      type: posts
+    values:
+      show_date: true
+      toc: true
+      toc_sticky: true
+      read_time: true
+
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+footer:
+  links:
+    - label: "GitHub"
+      icon: "fab fa-github"
+      url: "https://github.com/seuusuario"
+    - label: "Instagram"
+      icon: "fab fa-instagram"
+      url: "https://instagram.com/seuusuario"
+    - label: "Steam"
+      icon: "fab fa-steam"
+      url: "https://store.steampowered.com/curator/45368367-Pixizora/"

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2025-06-19T22:05:19-03:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Solrac Junio</title><subtitle>Blog sobre desenvolvimento de jogos, arte voxel, e projetos pessoais.</subtitle><entry><title type="html">POO vs ECS</title><link href="http://localhost:4000/2025/06/19/poo-vs-ecs.html" rel="alternate" type="text/html" title="POO vs ECS" /><published>2025-06-19T00:00:00-03:00</published><updated>2025-06-19T00:00:00-03:00</updated><id>http://localhost:4000/2025/06/19/poo-vs-ecs</id><content type="html" xml:base="http://localhost:4000/2025/06/19/poo-vs-ecs.html"><![CDATA[<h1 id="ecs-vs-poo-por-que-a-orientação-a-objetos-não-funciona-tão-bem-em-jogos">ECS vs POO: Por que a Orientação a Objetos Não Funciona Tão Bem em Jogos</h1>
+
+<blockquote>
+  <p>“Herança múltipla com 10 níveis de subclasses, código espaguete, performance patética… isso é o que você ganha tentando fazer jogo com POO pura.”
+– alguém que tentou e falhou</p>
+</blockquote>
+
+<hr />
+
+<h3 id="-um-pouco-de-história">📜 Um pouco de história…</h3>
+
+<p>Se você programou nos anos 90 ou 2000, <strong>POO</strong> (Programação Orientada a Objetos) era o evangelho. Todo mundo batia na tecla de “encapsulamento, herança e polimorfismo”. E com razão! Para software tradicional – como sistemas de gestão, bancos ou e-commerce – a POO fez maravilhas.</p>
+
+<p>Mas… quando o assunto é <strong>jogos</strong>, as coisas não são tão simples.</p>
+
+<hr />
+
+<h3 id="-o-problema-com-jogos">🎮 O problema com jogos</h3>
+
+<p>Jogos são um caos.</p>
+
+<p>Você tem milhares de objetos interagindo ao mesmo tempo: projéteis, partículas, inimigos, jogadores, itens no chão, árvores que pegam fogo, sistemas climáticos dinâmicos, IA, física…</p>
+
+<p>Tentar controlar tudo isso com uma <strong>árvore de herança tradicional</strong> é como tentar segurar um polvo com luvas de boxe.</p>
+
+<p>Imagine:</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Inimigo</span> <span class="p">{</span>
+    <span class="kt">void</span> <span class="n">mover</span><span class="p">();</span>
+    <span class="kt">void</span> <span class="n">atacar</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="k">class</span> <span class="nc">InimigoVoando</span> <span class="o">:</span> <span class="n">Inimigo</span> <span class="p">{</span>
+    <span class="kt">void</span> <span class="n">voar</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="k">class</span> <span class="nc">InimigoComEscudo</span> <span class="o">:</span> <span class="n">Inimigo</span> <span class="p">{</span>
+    <span class="kt">void</span> <span class="n">defender</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="k">class</span> <span class="nc">InimigoVoandoComEscudo</span> <span class="o">:</span> <span class="n">InimigoVoando</span><span class="p">,</span> <span class="n">InimigoComEscudo</span> <span class="p">{</span>
+    <span class="c1">// caos absoluto</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Daqui a pouco você tem classes como <code class="language-plaintext highlighter-rouge">InimigoComArmaduraQueVoaAtiraSeEscondeQuandoChove</code>. Boa sorte mantendo isso.</p>
+
+<hr />
+
+<h3 id="-a-virada-ecs">💡 A virada: ECS</h3>
+
+<p>Foi aí que surgiram arquiteturas como o <strong>ECS – Entity Component System</strong>.</p>
+
+<p>Primeiro popularizado em engines como <strong>Unity</strong>, mas inspirado por ideias anteriores de <strong>Data-Oriented Design</strong>, o ECS muda completamente a forma de pensar.</p>
+
+<p>Ele parte de uma ideia radical:</p>
+
+<blockquote>
+  <p>“<strong>Herança é um problema. Separar dados de lógica é a solução.</strong>”</p>
+</blockquote>
+
+<hr />
+
+<h3 id="-como-funciona-o-ecs">🧩 Como funciona o ECS?</h3>
+
+<p>Em vez de classes, você tem:</p>
+
+<ul>
+  <li><strong>Entities (Entidades)</strong> → são apenas IDs, como <code class="language-plaintext highlighter-rouge">42</code>, <code class="language-plaintext highlighter-rouge">102</code>, etc.</li>
+  <li><strong>Components (Componentes)</strong> → são <em>dados puros</em>. Ex: <code class="language-plaintext highlighter-rouge">Vida(100)</code>, <code class="language-plaintext highlighter-rouge">Posição(x=10, y=5)</code>, <code class="language-plaintext highlighter-rouge">Velocidade(3.5)</code></li>
+  <li><strong>Systems (Sistemas)</strong> → são funções que <strong>processam dados</strong>. Ex: <code class="language-plaintext highlighter-rouge">SistemaDeMovimento</code>, <code class="language-plaintext highlighter-rouge">SistemaDeCombate</code></li>
+</ul>
+
+<p>É como montar Lego:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[ Entidade #001 ]
+- Componente: Vida(100)
+- Componente: Posição(0,0)
+- Componente: Velocidade(5)
+</code></pre></div></div>
+
+<p>O sistema de movimento pega todas as entidades com <code class="language-plaintext highlighter-rouge">Posição</code> + <code class="language-plaintext highlighter-rouge">Velocidade</code> e as move. Simples, direto, performático.</p>
+
+<p>Sem herança. Sem acoplamento. Sem dor de cabeça.</p>
+
+<hr />
+
+<h3 id="-por-que-ecs-é-melhor-para-jogos">🚀 Por que ECS é melhor para jogos?</h3>
+
+<p>Vamos ser diretos.</p>
+
+<p><strong>1. Performance absurda.</strong>
+Como os componentes são dados puros, você pode armazená-los em arrays contíguos na memória. Isso significa <strong>cache-friendly</strong>, <strong>simd-friendly</strong>, <strong>multithread-friendly</strong>. Lembra da sua IA travando quando tinha 500 inimigos? ECS não sofre disso.</p>
+
+<p><strong>2. Composição em vez de herança.</strong>
+Quer que uma entidade voe? Adiciona <code class="language-plaintext highlighter-rouge">ComponentePodeVoar</code>. Quer que pare de voar? Remove. Sem precisar herdar nada.</p>
+
+<p><strong>3. Separação de responsabilidades.</strong>
+Se você estudou Clean Architecture ou DDD, sabe o valor de separar dados de lógica. ECS leva isso ao extremo.</p>
+
+<p><strong>4. Escalabilidade real.</strong>
+Projetos grandes com dezenas de sistemas e centenas de tipos de entidades se mantêm organizados, testáveis e eficientes.</p>
+
+<hr />
+
+<h3 id="-mas-por-que-ainda-usam-poo">🤔 Mas por que ainda usam POO?</h3>
+
+<p>Por inércia. Porque é o que se ensina. Porque é mais fácil de entender no começo. Porque funciona <em>até certo ponto</em>.</p>
+
+<p>Mas, com o tempo, a conta chega. O código vira uma cebola: camadas e camadas de herança e gambiarra tentando adaptar comportamentos emergentes.</p>
+
+<hr />
+
+<h3 id="-a-lição-de-design">🎓 A lição de design</h3>
+
+<p>A verdadeira lição aqui não é “POO é ruim”. Não é. POO é ótimo em muitos contextos. Mas <strong>em jogos</strong>, a composição supera a herança quase sempre.</p>
+
+<p>ECS é uma forma prática de aplicar essa filosofia.</p>
+
+<hr />
+
+<h3 id="-para-se-aprofundar">📚 Para se aprofundar:</h3>
+
+<ul>
+  <li><a href="https://gameprogrammingpatterns.com/component.html">Game Programming Patterns – Robert Nystrom</a></li>
+  <li>Engines como <a href="https://bevyengine.org/">Bevy (Rust)</a> e <a href="https://github.com/SanderMertens/flecs">Flecs (C++)</a></li>
+  <li>Palestra do Ryan Hipple onde aborda Scriptable Objects que pode servir para guardar os dados (Components)</li>
+</ul>
+
+<!-- Courtesy of embedresponsively.com -->
+
+<div class="responsive-video-container">
+    <iframe src="https://www.youtube-nocookie.com/embed/raQ3iHhE_Kk" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>
+  </div>
+
+<hr />
+
+<h3 id="-conclusão">💬 Conclusão</h3>
+
+<p>Se você quer fazer jogos <strong>mais performáticos</strong>, <strong>mais escaláveis</strong>, e <strong>mais flexíveis</strong>, aprenda ECS.
+No começo parece complicado. Mas depois que você entende, volta para POO só em último caso.</p>
+
+<p>E lembra: <strong>“favor composição ao invés de herança”</strong> não é só uma frase bonita. É um grito de socorro vindo de quem já manteve 10 mil linhas de código acoplado por subclasses demais.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[ECS vs POO: Por que a Orientação a Objetos Não Funciona Tão Bem em Jogos]]></summary></entry><entry><title type="html">Boas Vindas!</title><link href="http://localhost:4000/2025/06/19/boas-vindas.html" rel="alternate" type="text/html" title="Boas Vindas!" /><published>2025-06-19T00:00:00-03:00</published><updated>2025-06-19T00:00:00-03:00</updated><id>http://localhost:4000/2025/06/19/boas-vindas</id><content type="html" xml:base="http://localhost:4000/2025/06/19/boas-vindas.html"><![CDATA[<h2 id="bem-vindo-ao-meu-blog-sobre-games-e-tecnologia">Bem-vindo ao meu blog sobre games e tecnologia!</h2>
+
+<p>Olá! É um prazer ter você aqui no meu espaço dedicado ao universo dos games e da tecnologia. Neste blog, vou compartilhar minha jornada no desenvolvimento de jogos indie, trazendo dicas, tutoriais, experiências pessoais e novidades do setor.</p>
+
+<p>Além disso, vou abordar temas que estudo na faculdade de Ciência da Computação, mostrando como aplico esse conhecimento na prática, tanto em projetos acadêmicos quanto em criações próprias. Também pretendo explorar outros assuntos fascinantes do mundo da tecnologia, sempre com uma linguagem acessível e descontraída.</p>
+
+<p>Sinta-se à vontade para explorar, comentar e sugerir temas. Espero que minhas postagens inspirem e ajudem você, seja como entusiasta, estudante ou desenvolvedor!</p>
+
+<p>Vamos juntos nessa jornada pelo incrível universo dos games e da tecnologia! ☺️</p>]]></content><author><name></name></author><summary type="html"><![CDATA[Bem-vindo ao meu blog sobre games e tecnologia!]]></summary></entry></feed>
