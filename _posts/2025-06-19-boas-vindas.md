@@ -2,6 +2,7 @@
 layout: single
 title: "Boas Vindas!"
 date: 2025-06-19
+comments: true
 ---
 
 ## Bem-vindo ao meu blog sobre games e tecnologia!

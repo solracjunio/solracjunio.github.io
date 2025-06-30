@@ -20,6 +20,7 @@ defaults:
       toc: true
       toc_sticky: true
       read_time: true
+      comments: true
 
 plugins:
   - jekyll-feed
@@ -38,3 +39,6 @@ footer:
     - label: "Steam"
       icon: "fab fa-steam"
       url: "https://store.steampowered.com/curator/45368367-Pixizora/"
+
+comments:
+  provider: "manual"
