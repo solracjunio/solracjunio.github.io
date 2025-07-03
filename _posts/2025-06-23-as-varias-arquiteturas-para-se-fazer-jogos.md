@@ -1,6 +1,6 @@
 ---
 layout: single
-title: "Testei várias arquiteturas para fazer jogos. Aqui está o que aprendi."
+title: "As várias arquiteturas para se fazer jogos. Aqui está o que aprendi."
 date: 2025-06-23
 ---
 
@@ -110,4 +110,4 @@ E aí, vai querer fazer isso num castelo de cartas?
 
 Pra mim, a resposta tem sido clara:
 
-> **Use código espaguete para protótipos. Use ECS ou SOAP para jogos sérios.**
+> **Use código espaguete para protótipos. Use Outro para jogos sérios.**
