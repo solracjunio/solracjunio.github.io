@@ -2,6 +2,7 @@
 layout: single
 title: "Explorando Arquiteturas de Jogo com um Roguelite: Spagetti"
 date: 2025-06-30
+last_modified_at: 2025-07-03
 ---
 ## Introdução
 

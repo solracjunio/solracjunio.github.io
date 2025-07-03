@@ -2,6 +2,7 @@
 layout: single
 title: "Explorando Arquiteturas de Jogo com um Roguelite: ECS"
 date: 2025-07-03
+last_modified_at: 2025-07-03
 ---
 
 ## Introdução
