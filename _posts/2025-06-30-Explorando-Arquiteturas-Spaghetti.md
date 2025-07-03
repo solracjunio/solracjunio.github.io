@@ -5,7 +5,7 @@ date: 2025-06-30
 ---
 ## Introdução
 
-Recentemente, me inspirei na série de vídeos [**How to Make a Roguelite Game**](https://www.youtube.com/playlist?list=PLSHqi2dTiNGCncSOksACfJChpfPa6qz9w) e resolvi transformá-la em um laboratório para estudar diferentes arquiteturas de código: **Spaghetti**, **ECS** e **SOAP**.
+Recentemente, me inspirei na série de vídeos [**How to Make a Roguelite Game**](https://www.youtube.com/playlist?list=PLSHqi2dTiNGCncSOksACfJChpfPa6qz9w) e resolvi transformá-la em um laboratório para estudar diferentes arquiteturas de código: **Spaghetti**, **ECS (Entity-Component-System)** e **SOAP (Scriptable Object Architecture Pattern)**.
 
 A proposta é experimentar, na prática, como cada abordagem lida com aspectos fundamentais do desenvolvimento de jogos, como **organização**, **escalabilidade** e **manutenção**.
 
@@ -155,7 +155,7 @@ Apesar dos pesares, essa abordagem cumpriu seu papel: **revelar os limites de um
 
 ## Próximo passo: ECS
 
-No próximo post, reiniciarei o projeto com **ECS (Entity-Component-System)**.
+No próximo post, reiniciarei o projeto com **[ECS](https://solracjunio.github.io/2025/07/03/explorando-arquiteturas-ecs.htm)**.
 
 Será uma mudança total de paradigma — com foco em **modularidade, separação de responsabilidades** e **desacoplamento entre os sistemas**.
 
