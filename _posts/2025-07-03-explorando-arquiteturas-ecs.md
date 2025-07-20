@@ -2,7 +2,7 @@
 layout: single
 title: "Explorando Arquiteturas de Jogo com um Roguelite: ECS"
 date: 2025-07-03
-last_modified_at: 2025-07-03
+last_modified_at: 2025-07-20
 ---
 
 ## Introdução
@@ -105,6 +105,6 @@ Para jogos maiores, com equipes organizadas e planejamento de longo prazo, ECS p
 
 ## O Que Vem a Seguir
 
-Nos próximos posts, vou explorar a abordagem **SOAP (Scriptable Object Architecture Pattern)** — que promete unir a modularidade com uma integração mais amigável ao Unity.
+Nos próximos posts, vou explorar a abordagem **[SOAP (Scriptable Object Architecture Pattern)](https://solracjunio.github.io/2025/07/20/explorando-arquiteturas-soap.html)** — que promete unir a modularidade com uma integração mais amigável ao Unity.
 
 Acompanhe a série para ver como diferentes arquiteturas impactam o desenvolvimento do mesmo jogo!
