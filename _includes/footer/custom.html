@@ -1,0 +1,27 @@
+<script>
+  // Mostra os cards conforme entram na tela
+  (function () {
+    var items = document.querySelectorAll('.eg-reveal');
+    if (!items.length) return;
+    if (!('IntersectionObserver' in window) ||
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      items.forEach(function (el) { el.classList.add('is-visible'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          var el = entry.target;
+          el.classList.add('is-visible');
+          // tira o atraso depois da entrada, para o hover responder na hora
+          setTimeout(function () { el.style.transitionDelay = ''; }, 900);
+          io.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -40px 0px', threshold: 0.1 });
+    items.forEach(function (el, i) {
+      el.style.transitionDelay = (i % 3) * 80 + 'ms';
+      io.observe(el);
+    });
+  })();
+</script>
