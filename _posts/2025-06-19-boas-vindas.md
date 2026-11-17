@@ -3,6 +3,8 @@ layout: single
 title: "Boas Vindas!"
 date: 2025-06-19
 comments: true
+header:
+  teaser: /assets/images/2025-06-19-boas-vindas/teaser.jpg
 ---
 
 ## Bem-vindo ao meu blog sobre games e tecnologia!

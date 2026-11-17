@@ -3,6 +3,8 @@ layout: single
 title: "As várias arquiteturas para se fazer jogos. Aqui está o que aprendi."
 date: 2025-06-23
 last_modified_at: 2025-07-03
+header:
+  teaser: /assets/images/2025-06-23-as-varias-arquiteturas-para-se-fazer-jogos/teaser.jpg
 ---
 
 > “No fim do dia, os jogadores só querem se divertir. Mas nós, devs, queremos mais: queremos entender, melhorar e evoluir nosso código.”
