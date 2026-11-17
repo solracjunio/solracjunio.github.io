@@ -1,4 +1,63 @@
 <script>
+  // Alternar grade/lista na página inicial e lembrar a escolha
+  (function () {
+    var buttons = document.querySelectorAll('.eg-view-btn');
+    if (!buttons.length) return;
+    var root = document.documentElement;
+    function apply(view) {
+      if (view === 'list') root.setAttribute('data-eg-view', 'list');
+      else root.removeAttribute('data-eg-view');
+      buttons.forEach(function (b) {
+        b.setAttribute('aria-pressed', String(b.getAttribute('data-view') === view));
+      });
+    }
+    apply(root.getAttribute('data-eg-view') === 'list' ? 'list' : 'grid');
+    buttons.forEach(function (b) {
+      b.addEventListener('click', function () {
+        var view = b.getAttribute('data-view');
+        apply(view);
+        try { localStorage.setItem('eg-view', view); } catch (e) {}
+      });
+    });
+  })();
+
+  // Aplica o padrão da página inicial nos posts e páginas internas
+  (function () {
+    // Blocos que ganham a luz que segue o mouse
+    document.querySelectorAll(
+      '.toc, .pagination--pager:not(.disabled), .page__content div.highlighter-rouge, ' +
+      '.page__content figure.highlight, .list__item .archive__item, .page__content .btn, .page__content .eg-btn, .page__taxonomy-item'
+    ).forEach(function (el) { el.classList.add('eg-spotlight'); });
+
+    // Imagens dos posts: cópia desfocada atrás espalha a cor da imagem no fundo
+    document.querySelectorAll('.page__inner-wrap .page__content img').forEach(function (img) {
+      if (img.closest('.eg-media') || img.closest('.eg-btn')) return;
+      if (/shields\.io|badge/i.test(img.src)) return;
+      var wrap = document.createElement('span');
+      wrap.className = 'eg-media';
+      var glow = document.createElement('span');
+      glow.className = 'eg-media__glow';
+      glow.setAttribute('aria-hidden', 'true');
+      glow.style.backgroundImage = 'url("' + img.src + '")';
+      img.parentNode.insertBefore(wrap, img);
+      wrap.appendChild(glow);
+      wrap.appendChild(img);
+      wrap.classList.add('eg-reveal');
+    });
+  })();
+
+  // Spotlight: a luz segue o mouse dentro do item (mesma técnica do eagle.cool)
+  (function () {
+    var items = document.querySelectorAll('.eg-spotlight');
+    items.forEach(function (el) {
+      el.addEventListener('pointermove', function (e) {
+        var r = el.getBoundingClientRect();
+        el.style.setProperty('--x', (e.clientX - r.left) + 'px');
+        el.style.setProperty('--y', (e.clientY - r.top) + 'px');
+      });
+    });
+  })();
+
   // Mostra os cards conforme entram na tela
   (function () {
     var items = document.querySelectorAll('.eg-reveal');

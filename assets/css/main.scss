@@ -70,8 +70,14 @@ body {
 .greedy-nav {
   background: transparent;
   a { font-weight: 500; letter-spacing: -0.01em; }
-  .site-title { font-weight: 700; font-size: 1.05em; }
-  .visible-links a:before { background: var(--eg-blue-light); }
+  .site-title { font-weight: 700; font-size: 1.05em; color: var(--eg-text); }
+  // Sem barra azul embaixo: como no Eagle, o link só clareia no hover
+  .visible-links a {
+    color: var(--eg-muted);
+    transition: color .2s ease;
+    &:before { display: none; }
+    &:hover { color: var(--eg-text); }
+  }
   .hidden-links {
     background: #0a0a0c;
     border: 1px solid var(--eg-border);
@@ -125,8 +131,10 @@ h1, h2, h3, h4, .page__title, .archive__item-title {
 
 // ===== Conteúdo =====
 .page__content {
-  a { text-decoration: none; border-bottom: 1px solid rgba(50, 151, 255, 0.35); }
-  a:hover { border-bottom-color: var(--eg-blue-light); }
+  a { text-decoration: none; transition: color .2s ease; }
+  // mesmo seletor do tema, para vencer o "underline" dele em todos os links
+  a:not(.btn):hover { text-decoration: none; }
+  a:not(.btn):not(.eg-card):not(.eg-btn):not(.eg-pill):hover { color: var(--eg-link-hover, #7fbcff); }
   img { border-radius: 12px; }
   blockquote {
     border-left: 3px solid var(--eg-blue-light);
@@ -196,9 +204,13 @@ code.highlighter-rouge {
   border-top: 1px solid var(--eg-border);
   color: var(--eg-muted);
   margin-top: 4em;
-  a { color: var(--eg-muted); }
-  a:hover { color: var(--eg-text); }
+  a { color: var(--eg-muted); text-decoration: none; transition: color .2s ease; }
+  a:hover { color: var(--eg-text); text-decoration: none; }
 }
+
+// Nenhum link sublinha no hover
+a, a:hover, a:focus { text-decoration: none; }
+.nav__list a:hover, .author__urls a:hover, a.reversefootnote:hover { text-decoration: none; }
 
 ::selection { background: rgba(50, 151, 255, 0.35); color: #fff; }
 
@@ -243,8 +255,8 @@ code.highlighter-rouge {
 
 .eg-hero__title {
   margin: 0 auto;
-  max-width: 16em;
-  font-size: clamp(2.1rem, 6vw, 4.25rem);
+  max-width: 18em;
+  font-size: clamp(2rem, 5vw, 3.6rem);
   line-height: 1.05;
   letter-spacing: -0.04em;
   font-weight: 800;
@@ -280,7 +292,6 @@ code.highlighter-rouge {
   font-weight: 600;
   text-decoration: none;
   transition: filter .2s ease, transform .2s ease, background .2s ease, border-color .2s ease;
-  &:hover { transform: translateY(-1px); }
 }
 .eg-btn--primary {
   background: linear-gradient(#3297ff 0%, rgba(50, 151, 255, 0) 100%), var(--eg-blue);
@@ -313,25 +324,58 @@ code.highlighter-rouge {
   gap: 1.25em;
 }
 
+.eg-card-wrap {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+}
+
 .eg-card {
+  position: relative;
+  z-index: 1;
+  flex: 1;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
   border: 1px solid var(--eg-border);
   border-radius: 16px;
-  background: var(--eg-card);
+  // fundo quase opaco: o glow aparece em volta do card, não atrás do texto
+  background: linear-gradient(rgba(247, 248, 248, 0.04), rgba(247, 248, 248, 0.04)), #060607;
   color: var(--eg-text);
   text-decoration: none;
-  transition: background .25s ease, border-color .25s ease, transform .25s ease, box-shadow .25s ease;
+  transition: background .25s ease, border-color .25s ease;
   &:hover {
-    background: var(--eg-card-hover);
-    border-color: var(--eg-border-strong);
-    transform: translateY(-4px);
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(50, 151, 255, 0.15);
+    background: linear-gradient(rgba(247, 248, 248, 0.07), rgba(247, 248, 248, 0.07)), #060607;
     color: var(--eg-text);
-    .eg-card__media img { transform: scale(1.04); }
-    .eg-card__title { color: var(--eg-blue-light); }
   }
+}
+
+// ===== Glow ambiente: a cor da capa se espalha pelo fundo =====
+.eg-ambient {
+  position: absolute;
+  z-index: 0;
+  inset: 6% 4% -2%;
+  border-radius: 24px;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0.35;
+  filter: blur(48px) saturate(1.8);
+  transform: translateZ(0) scale(0.96);
+  transition: opacity .4s ease, transform .4s ease;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0;
+  }
+}
+.eg-ambient--gradient {
+  background:
+    radial-gradient(circle at 30% 20%, #3297ff, transparent 65%),
+    radial-gradient(circle at 80% 90%, #aa99ff, transparent 65%);
+}
+.eg-card-wrap:hover .eg-ambient {
+  opacity: 0.65;
+  transform: translateZ(0) scale(1.02);
 }
 
 .eg-card__media {
@@ -382,8 +426,391 @@ code.highlighter-rouge {
   .js-reveal .eg-reveal {
     opacity: 0;
     transform: translateY(24px);
-    transition: opacity .6s ease, transform .6s ease, background .25s ease, border-color .25s ease, box-shadow .25s ease;
+    transition: opacity .6s ease, transform .6s ease, background .25s ease, border-color .25s ease;
   }
   .js-reveal .eg-reveal.is-visible { opacity: 1; transform: none; }
-  .js-reveal .eg-reveal.is-visible:hover { transform: translateY(-4px); }
+}
+
+
+// ===== Spotlight (glow que segue o mouse, como no eagle.cool) =====
+// :before = luz difusa grande atrás do conteúdo
+// :after  = brilho na borda, recortado com mask para virar só um anel
+.eg-spotlight {
+  --spotlight-size: 960px;
+  --spotlight-color: rgba(255, 255, 255, 0.06);
+  --glow-color: rgba(255, 255, 255, 0.4);
+  --glow-border: 1.5px;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .25s ease;
+  }
+
+  &::before {
+    z-index: -1;
+    top: 0;
+    left: 0;
+    width: var(--spotlight-size);
+    height: var(--spotlight-size);
+    border-radius: 50%;
+    background: radial-gradient(50% 50% at 50% 50%, var(--spotlight-color) 0%, transparent 100%);
+    filter: blur(10px);
+    transform: translate(calc(var(--x, 50%) - var(--spotlight-size) / 2),
+                         calc(var(--y, 50%) - var(--spotlight-size) / 2));
+    will-change: transform;
+  }
+
+  &::after {
+    z-index: 2;
+    inset: -1px;
+    padding: var(--glow-border);
+    border-radius: inherit;
+    background: radial-gradient(circle at var(--x, 50%) var(--y, 50%),
+                rgba(255, 255, 255, 0.4) 3%, var(--glow-color) 20%, transparent 50%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#fff 0 0) content-box exclude, linear-gradient(#fff 0 0);
+  }
+
+  &:hover::before,
+  &:hover::after { opacity: 1; }
+}
+
+// Botões e etiqueta são pequenos: luz menor e mais forte
+.eg-btn.eg-spotlight,
+.eg-pill.eg-spotlight {
+  --spotlight-size: 240px;
+  --spotlight-color: rgba(255, 255, 255, 0.14);
+}
+
+// Em telas de toque não há cursor para seguir
+@media (hover: none) and (pointer: coarse) {
+  .eg-spotlight::before,
+  .eg-spotlight::after { display: none; }
+}
+
+// ===== Glow dos textos e botões sobre o fundo =====
+// Títulos com gradiente (background-clip: text) usam drop-shadow,
+// porque text-shadow seria pintado por cima do gradiente.
+.eg-hero__title {
+  filter:
+    drop-shadow(0 0 24px rgba(50, 151, 255, 0.35))
+    drop-shadow(0 0 60px rgba(170, 153, 255, 0.25));
+}
+.page__title {
+  filter: drop-shadow(0 0 22px rgba(50, 151, 255, 0.3));
+}
+
+.greedy-nav .site-title {
+  text-shadow: 0 0 18px rgba(50, 151, 255, 0.45);
+}
+.greedy-nav .visible-links a:hover {
+  text-shadow: 0 0 14px rgba(255, 255, 255, 0.45);
+}
+
+.eg-section-title {
+  text-shadow: 0 0 16px rgba(50, 151, 255, 0.35);
+}
+
+.eg-card__title {
+  text-shadow: 0 0 18px rgba(255, 255, 255, 0.12);
+  transition: text-shadow .3s ease;
+}
+.eg-card:hover .eg-card__title {
+  text-shadow: 0 0 18px rgba(255, 255, 255, 0.35), 0 0 36px rgba(50, 151, 255, 0.35);
+}
+
+// Botões: halo suave que fica azul e mais forte no hover
+.eg-btn--ghost {
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+    0 0 24px rgba(50, 151, 255, 0.12);
+  transition: box-shadow .3s ease, background .2s ease, border-color .2s ease, color .2s ease;
+  i { filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.35)); }
+  &:hover {
+    box-shadow:
+      0 0 0 1px rgba(50, 151, 255, 0.25) inset,
+      0 0 28px rgba(50, 151, 255, 0.4),
+      0 0 64px rgba(50, 151, 255, 0.2);
+    text-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
+  }
+}
+.eg-btn--primary,
+.btn--primary {
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.15) inset,
+    0 0 24px rgba(50, 151, 255, 0.45),
+    0 8px 40px rgba(0, 114, 239, 0.35);
+}
+
+// Etiqueta "Novo" e borda da pílula
+.eg-pill {
+  box-shadow: 0 0 24px rgba(50, 151, 255, 0.12);
+  transition: box-shadow .3s ease, border-color .2s ease, color .2s ease;
+  &:hover { box-shadow: 0 0 32px rgba(50, 151, 255, 0.3); }
+}
+.eg-pill__tag {
+  box-shadow: 0 0 16px rgba(50, 151, 255, 0.6);
+}
+
+// Pulso lento, igual ao glow animado do eagle.cool
+@media (prefers-reduced-motion: no-preference) {
+  .eg-pill__tag { animation: eg-glow-pulse 2s ease-in-out infinite alternate; }
+}
+@keyframes eg-glow-pulse {
+  from { box-shadow: 0 0 12px rgba(50, 151, 255, 0.45); }
+  to   { box-shadow: 0 0 24px rgba(50, 151, 255, 0.85); }
+}
+
+// =====================================================================
+// ===== Páginas internas (posts, About, Setup) no padrão da home =====
+// =====================================================================
+
+// Cabeçalho do post/página
+.page__inner-wrap > header,
+.page__inner-wrap > .page__title,
+#page-title {
+  margin-top: 1.5em;
+}
+.page__inner-wrap .page__title {
+  font-size: clamp(2rem, 4.5vw, 3.25rem);
+  letter-spacing: -0.035em;
+  font-weight: 800;
+}
+.page__inner-wrap > header .page__meta,
+.page__inner-wrap > .page__meta {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  margin-top: 0.75em;
+  padding: 0.35em 0.9em;
+  border: 1px solid var(--eg-border);
+  border-radius: 999px;
+  background: var(--eg-card);
+  box-shadow: 0 0 24px rgba(50, 151, 255, 0.12);
+  font-size: 0.75em;
+}
+
+// Títulos do texto com brilho leve
+.page__content {
+  h2:not(.eg-section-title) {
+    margin-top: 2.25em;
+    padding-bottom: 0.4em;
+    border-bottom: 1px solid var(--eg-border);
+    text-shadow: 0 0 22px rgba(50, 151, 255, 0.35);
+  }
+  h3, h4 { text-shadow: 0 0 18px rgba(255, 255, 255, 0.15); }
+  strong { color: #fff; }
+  a:not(.btn):not(.eg-btn):not(.eg-card):not(.eg-pill) { text-shadow: 0 0 12px rgba(50, 151, 255, 0.35); }
+  ul li::marker, ol li::marker { color: var(--eg-blue-light); }
+}
+
+// Imagens dos posts: borda fina + glow com a cor da própria imagem
+.eg-media {
+  position: relative;
+  isolation: isolate;
+  display: block;
+  margin: 1.5em 0;
+  img {
+    position: relative;
+    z-index: 1;
+    display: block;
+    margin: 0 auto;
+    border: 1px solid var(--eg-border);
+    border-radius: 16px;
+  }
+}
+.eg-media__glow {
+  position: absolute;
+  z-index: 0;
+  inset: 6% 6% 0;
+  background-size: cover;
+  background-position: center;
+  border-radius: 24px;
+  opacity: 0.35;
+  filter: blur(48px) saturate(1.8);
+  transform: translateZ(0);
+  pointer-events: none;
+  transition: opacity .4s ease;
+}
+.eg-media:hover .eg-media__glow { opacity: 0.6; }
+
+// Vídeos incorporados
+.responsive-video-container {
+  border: 1px solid var(--eg-border);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 0 40px rgba(50, 151, 255, 0.2), 0 0 90px rgba(170, 153, 255, 0.12);
+}
+
+// Tabelas e código como cards de vidro com halo
+.page__content table {
+  background: #060607;
+  box-shadow: 0 0 32px rgba(50, 151, 255, 0.1);
+}
+.page__content div.highlighter-rouge,
+.page__content figure.highlight {
+  box-shadow: 0 0 32px rgba(50, 151, 255, 0.12);
+}
+
+// Índice lateral com o mesmo halo dos cards
+.toc {
+  box-shadow: 0 0 32px rgba(50, 151, 255, 0.12);
+  .nav__title { text-shadow: 0 0 14px rgba(50, 151, 255, 0.4); }
+  .toc__menu a { border-bottom: none; }
+  .toc__menu a:hover, .toc__menu a.active { text-shadow: 0 0 12px rgba(255, 255, 255, 0.35); }
+}
+
+// Navegação entre posts: botões fantasma como os da home
+.pagination--pager {
+  border: 1px solid var(--eg-border);
+  border-radius: 12px;
+  background: var(--eg-card);
+  color: var(--eg-text);
+  font-weight: 600;
+  box-shadow: 0 0 24px rgba(50, 151, 255, 0.12);
+  transition: box-shadow .3s ease, background .2s ease, border-color .2s ease;
+  &:hover:not(.disabled) {
+    background: var(--eg-card-hover);
+    border-color: var(--eg-border-strong);
+    color: var(--eg-text);
+    box-shadow: 0 0 0 1px rgba(50, 151, 255, 0.25) inset, 0 0 28px rgba(50, 151, 255, 0.4), 0 0 64px rgba(50, 151, 255, 0.2);
+    text-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
+  }
+  &.disabled { opacity: 0.35; box-shadow: none; }
+}
+.pagination { margin-top: 3em; }
+
+// Tags e categorias como pílulas
+.page__taxonomy-item {
+  border: 1px solid var(--eg-border);
+  border-radius: 999px;
+  background: var(--eg-card);
+  color: var(--eg-muted);
+  &:hover { color: var(--eg-text); border-color: var(--eg-border-strong); }
+}
+
+// Data de atualização e rodapé do post
+.page__inner-wrap > footer:has(> *) { border-top: 1px solid var(--eg-border); padding-top: 1em; }
+// Rodapé vazio (ex.: About, sem data) não mostra nada
+.page__inner-wrap > footer.page__meta:not(:has(> *)) { display: none; }
+
+// Comentários (giscus) dentro de um card de vidro
+#giscus_thread,
+.page__comments {
+  margin-top: 3em;
+  padding: 1.25em;
+  border: 1px solid var(--eg-border);
+  border-radius: 16px;
+  background: var(--eg-card);
+  box-shadow: 0 0 32px rgba(50, 151, 255, 0.1);
+}
+.page__comments #giscus_thread { margin: 0; padding: 0; border: 0; background: none; box-shadow: none; }
+
+// Botões dentro do texto (ex.: página About)
+.page__inner-wrap .page__content .eg-hero__actions { justify-content: flex-start; margin: 1.5em 0; }
+.page__inner-wrap .page__content .eg-btn { color: var(--eg-text); }
+
+// Resultados da busca no mesmo estilo dos cards
+.search-content .archive__item {
+  border: 1px solid var(--eg-border);
+  border-radius: 16px;
+  background: var(--eg-card);
+  padding: 1em 1.25em;
+  margin-bottom: 1em;
+}
+
+
+// ===== Índice lateral: item da seção atual =====
+// O tema pinta o item ativo de azul-claro com texto escuro (o "branco");
+// aqui ele segue o padrão escuro com destaque azul e brilho.
+.toc .active a,
+.toc .toc__menu .active > a {
+  background: rgba(50, 151, 255, 0.14);
+  color: var(--eg-text);
+  box-shadow: inset 2px 0 0 var(--eg-blue-light);
+  text-shadow: 0 0 12px rgba(50, 151, 255, 0.6);
+}
+
+// ===== Cabeçalho "Artigos recentes" + alternar grade/lista =====
+.eg-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1em;
+  margin-bottom: 1.25em;
+  .eg-section-title { margin: 0; }
+}
+
+.eg-view-toggle {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--eg-border);
+  border-radius: 10px;
+  background: var(--eg-card);
+  box-shadow: 0 0 24px rgba(50, 151, 255, 0.1);
+}
+.eg-view-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.35em 0.7em;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--eg-muted);
+  font: inherit;
+  font-size: 0.75em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s ease, color .2s ease, box-shadow .2s ease;
+  svg { fill: currentColor; }
+  &:hover { color: var(--eg-text); }
+  &[aria-pressed="true"] {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--eg-text);
+    box-shadow: 0 0 16px rgba(50, 151, 255, 0.35);
+  }
+  &:focus-visible { outline: 2px solid var(--eg-blue-light); outline-offset: 1px; }
+  @media (max-width: 480px) { span { display: none; } }
+}
+
+// ===== Modo lista =====
+[data-eg-view="list"] {
+  .eg-grid {
+    grid-template-columns: 1fr;
+    max-width: 920px;
+    margin: 0 auto;
+    gap: 1em;
+  }
+  .eg-card { flex-direction: row; }
+  .eg-card__media {
+    flex: 0 0 260px;
+    aspect-ratio: auto;
+    min-height: 150px;
+    border-bottom: none;
+    border-right: 1px solid var(--eg-border);
+  }
+  .eg-card__body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 1.1em 1.5em;
+  }
+  .eg-card__placeholder { font-size: 2.5em; }
+
+  @media (max-width: 600px) {
+    .eg-card__media { flex-basis: 110px; min-height: 0; }
+    .eg-card__body { padding: 0.9em 1em; }
+    .eg-card__excerpt { display: none; }
+    .eg-card__title { font-size: 1em; }
+  }
 }

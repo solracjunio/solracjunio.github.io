@@ -4,4 +4,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <meta name="theme-color" content="#000000">
 <!-- Ativa a animação de entrada só quando há JS (sem JS, tudo aparece normal) -->
-<script>document.documentElement.classList.add('js-reveal');</script>
+<script>
+  document.documentElement.classList.add('js-reveal');
+  // Modo de exibição dos artigos (grade/lista) salvo neste navegador; padrão: grade.
+  // Aplicado aqui no <head> para a página já abrir no modo certo, sem piscar.
+  try {
+    if (localStorage.getItem('eg-view') === 'list') {
+      document.documentElement.setAttribute('data-eg-view', 'list');
+    }
+  } catch (e) {}
+</script>
