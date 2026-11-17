@@ -356,12 +356,12 @@ html, body { overflow-x: clip; }
   position: absolute;
   z-index: 0;
   // passa da borda do card para o glow alcançar mais longe
-  inset: -4% -8% -10%;
+  inset: -10% -14% -18%;
   border-radius: 24px;
   overflow: hidden;
   pointer-events: none;
-  opacity: 0.22;
-  filter: blur(80px) saturate(1.5);
+  opacity: 0.15;
+  filter: blur(110px) saturate(1.4);
   transform: translateZ(0) scale(0.96);
   transition: opacity .4s ease, transform .4s ease;
   img {
@@ -377,8 +377,8 @@ html, body { overflow-x: clip; }
     radial-gradient(circle at 80% 90%, #aa99ff, transparent 65%);
 }
 .eg-card-wrap:hover .eg-ambient {
-  opacity: 0.45;
-  transform: translateZ(0) scale(1.06);
+  opacity: 0.32;
+  transform: translateZ(0) scale(1.08);
 }
 
 .eg-card__media {
@@ -708,6 +708,8 @@ html, body { overflow-x: clip; }
 // Comentários (giscus) dentro de um card de vidro
 #giscus_thread,
 .page__comments {
+  // o conteúdo do post é float: sem clear, a caixa nasce no topo do artigo (atrás do título)
+  clear: both;
   margin-top: 3em;
   padding: 1.25em;
   border: 1px solid var(--eg-border);
