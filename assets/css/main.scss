@@ -308,6 +308,8 @@ a, a:hover, a:focus { text-decoration: none; }
 
 // ===== Página inicial: grade de posts =====
 .eg-posts { padding-bottom: 2em; scroll-margin-top: 5em; }
+// o glow ambiente passa da borda dos cards; "clip" evita rolagem lateral sem quebrar o header fixo
+html, body { overflow-x: clip; }
 
 .eg-section-title {
   margin: 0 0 1.25em;
@@ -353,12 +355,13 @@ a, a:hover, a:focus { text-decoration: none; }
 .eg-ambient {
   position: absolute;
   z-index: 0;
-  inset: 6% 4% -2%;
+  // passa da borda do card para o glow alcançar mais longe
+  inset: -4% -8% -10%;
   border-radius: 24px;
   overflow: hidden;
   pointer-events: none;
-  opacity: 0.35;
-  filter: blur(48px) saturate(1.8);
+  opacity: 0.22;
+  filter: blur(80px) saturate(1.5);
   transform: translateZ(0) scale(0.96);
   transition: opacity .4s ease, transform .4s ease;
   img {
@@ -374,8 +377,8 @@ a, a:hover, a:focus { text-decoration: none; }
     radial-gradient(circle at 80% 90%, #aa99ff, transparent 65%);
 }
 .eg-card-wrap:hover .eg-ambient {
-  opacity: 0.65;
-  transform: translateZ(0) scale(1.02);
+  opacity: 0.45;
+  transform: translateZ(0) scale(1.06);
 }
 
 .eg-card__media {
@@ -786,16 +789,17 @@ a, a:hover, a:focus { text-decoration: none; }
 // ===== Modo lista =====
 [data-eg-view="list"] {
   .eg-grid {
-    grid-template-columns: 1fr;
+    // minmax(0, …): sem isso a coluna cresce até caber o resumo de uma linha
+    grid-template-columns: minmax(0, 1fr);
     max-width: 920px;
     margin: 0 auto;
-    gap: 1em;
+    gap: 0.6em;
   }
-  .eg-card { flex-direction: row; }
+  .eg-card { flex-direction: row; min-width: 0; }
   .eg-card__media {
-    flex: 0 0 260px;
+    flex: 0 0 130px;
     aspect-ratio: auto;
-    min-height: 150px;
+    min-height: 75px;
     border-bottom: none;
     border-right: 1px solid var(--eg-border);
   }
@@ -803,13 +807,22 @@ a, a:hover, a:focus { text-decoration: none; }
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 1.1em 1.5em;
+    min-width: 0; // permite o corte com reticências do resumo
+    padding: 0.55em 1.2em;
   }
-  .eg-card__placeholder { font-size: 2.5em; }
+  .eg-card__meta { margin-bottom: 0.2em; }
+  // resumo em uma linha só, com reticências, para manter a linha fina
+  .eg-card__excerpt {
+    margin-top: 0.25em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .eg-card__placeholder { font-size: 1.6em; }
 
   @media (max-width: 600px) {
-    .eg-card__media { flex-basis: 110px; min-height: 0; }
-    .eg-card__body { padding: 0.9em 1em; }
+    .eg-card__media { flex-basis: 80px; min-height: 0; }
+    .eg-card__body { padding: 0.5em 0.9em; }
     .eg-card__excerpt { display: none; }
     .eg-card__title { font-size: 1em; }
   }
