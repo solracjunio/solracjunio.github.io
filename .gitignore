@@ -1,0 +1,5 @@
+.devbox/
+vendor/
+.bundle/
+.jekyll-cache/
+.sass-cache/

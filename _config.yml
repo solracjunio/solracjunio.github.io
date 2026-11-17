@@ -5,6 +5,7 @@ description: >-
 
 #theme: minimal-mistakes-jekyll
 remote_theme: mmistakes/minimal-mistakes
+minimal_mistakes_skin: "dark"
 
 include: ["_pages"]
 
@@ -42,3 +43,16 @@ footer:
 
 comments:
   provider: "manual"
+
+exclude:
+  - .devbox/
+  - devbox.json
+  - devbox.lock
+  - vendor/
+  - .bundle/
+  - .jekyll-cache/
+  - .sass-cache/
+  - _site/
+  - Gemfile
+  - Gemfile.lock
+  - node_modules/

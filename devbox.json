@@ -1,0 +1,28 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/main/.schema/devbox.schema.json",
+  "packages": [
+    "ruby@3.3",
+    "gcc@latest",
+    "gnumake@latest",
+    "pkg-config@latest",
+    "libffi@latest",
+    "zlib@latest"
+  ],
+  "env": {
+    "BUNDLE_PATH": "vendor/bundle",
+    "JEKYLL_ENV": "development"
+  },
+  "shell": {
+    "init_hook": [
+      "echo 'Blog: rode \"devbox run setup\" (1a vez) e depois \"devbox run serve\"'"
+    ],
+    "scripts": {
+      "setup": [
+        "bundle lock --add-platform x86_64-linux",
+        "bundle install"
+      ],
+      "serve": "bundle exec jekyll serve --livereload --force_polling --host 0.0.0.0 -d .devbox/site",
+      "build": "bundle exec jekyll build -d .devbox/site"
+    }
+  }
+}
