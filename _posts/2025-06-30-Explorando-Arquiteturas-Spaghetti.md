@@ -1,6 +1,7 @@
 ---
 layout: single
 title: "Explorando Arquiteturas de Jogo com um Roguelite: Spagetti"
+excerpt: "Primeira parte da série que usa um roguelite como laboratório de arquiteturas de código: começando pela forma mais rápida, e mais perigosa, de programar um jogo, a Arquitetura Spaghetti."
 date: 2025-06-30
 last_modified_at: 2025-07-03
 ---

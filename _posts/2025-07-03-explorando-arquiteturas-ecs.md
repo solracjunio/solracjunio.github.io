@@ -1,6 +1,7 @@
 ---
 layout: single
 title: "Explorando Arquiteturas de Jogo com um Roguelite: ECS"
+excerpt: "Segunda parte da série: refazendo o roguelite com ECS (Entity-Component-System) usando o Flecs.NET no Unity, em busca de uma estrutura mais modular, escalável e fácil de manter do que a Spaghetti."
 date: 2025-07-03
 last_modified_at: 2025-07-20
 ---

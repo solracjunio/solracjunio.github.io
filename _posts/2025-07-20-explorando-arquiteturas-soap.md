@@ -1,6 +1,7 @@
 ---
 layout: single
 title: "Explorando Arquiteturas de Jogo com um Roguelite: SOAP"
+excerpt: "Terceira parte da série: reconstruindo o roguelite com a SOAP (Scriptable Object Architecture Pattern), uma abordagem modular, editável e fácil de debugar, comparada às arquiteturas Spaghetti e ECS."
 date: 2025-07-20
 last_modified_at: 2025-07-20
 ---
